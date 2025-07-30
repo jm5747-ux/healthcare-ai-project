@@ -43,21 +43,22 @@ hemoglobin = st.slider("Hemoglobin Level", 0, 20, 10)
 creatinine = st.slider("Creatinine Level", 0, 10, 5)
 glucose = st.slider("Glucose Level", 0, 300, 100)
 
+# Collected the data from the user
 custom_patient = {
-    'age': age,                    # Age (18-95)
+    'age': age,                    
     'gender': gender,    
     'primary_diagnosis': primary_diagnosis,
     'length_of_stay': length_of_stay,
     'num_medications': num_medications,
     'num_procedures': num_procedures,
-    'emergency_admission': emergency_admission,     # Emergency admission (1=Yes, 0=No)
+    'emergency_admission': emergency_admission,     
     'insurance_type': insurance_type,
-    'prev_hospitalizations': prev_hospitalizations,   # Previous hospitalizations in last year (0-10)
-    'chronic_conditions': chronic_conditions,      # Number of chronic conditions (0-8)
-    'discharge_destination': discharge_destination, # 'Home', 'Skilled Nursing Facility', 'Rehabilitation', 'Hospice'
-    'hemoglobin': hemoglobin,           # Hemoglobin level
-    'creatinine': creatinine,            # Creatinine level
-    'glucose': glucose              # Glucose level
+    'prev_hospitalizations': prev_hospitalizations,   
+    'chronic_conditions': chronic_conditions,      
+    'discharge_destination': discharge_destination, 
+    'hemoglobin': hemoglobin,           
+    'creatinine': creatinine,            
+    'glucose': glucose              
 }
 
 # Make prediction
