@@ -24,21 +24,17 @@ predictor = ml_model.HospitalReadmissionPredictor()
 X, y = predictor.preprocess_data(df_hospital_readmission)
 X_test, y_test, y_pred, y_pred_proba = predictor.train_model(X, y, 'random_forest')
 
-
-# Load the model
-#predictor = ml_model.load_model()
-
 st.title("Healthcare AI Project")
 st.write("Welcome! This app predicts the risk of hospital readmission.")
 
-# Example inputs (replace with your actual model and logic)
+# Example inputs
 age = st.slider("Patient Age", 0, 100, 50)
 gender = st.selectbox("Patient Gender", ["Male", "Female"])
 primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease", "Stroke", "Hip/Knee Surgery", "Coronary Artery Disease"])
-length_of_stay = st.slider("Length of Stay", 1, 30, 10)
+length_of_stay = st.slider("Length of Stay (days)", 1, 50, 10)
 num_medications = st.slider("Number of Medications", 1, 20, 5)
 num_procedures = st.slider("Number of Procedures", 0, 8, 2)
-emergency_admission = st.selectbox("Emergency Admission", [0, 1])
+emergency_admission = st.selectbox("Emergency Admission", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured"])
 prev_hospitalizations = st.slider("Previous Hospitalizations", 0, 10, 2)
 chronic_conditions = st.slider("Number of Chronic Conditions", 0, 8, 2)
