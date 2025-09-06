@@ -47,6 +47,10 @@ living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "As
 # Clinical History Section
 st.header("Clinical History")
 primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease"])
+chronic_conditions = st.slider("Number of Chronic Conditions", 0, 8, 2)
+comorbidity_score = st.slider("Charlson Comorbidity Index (CCI)", 0, 15, 3)
+prev_hospitalizations = st.slider("Previous Hospitalizations (12 months)", 0, 10, 2)
+recent_readmission = st.selectbox("Readmission in Last 30 Days?", ["Yes", "No"])
 
 
 
