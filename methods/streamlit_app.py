@@ -27,21 +27,53 @@ X_test, y_test, y_pred, y_pred_proba = predictor.train_model(X, y, 'random_fores
 st.title("Healthcare AI Project")
 st.write("Welcome! This app predicts the risk of hospital readmission.")
 
+# Patient Demographics Section
+st.header("Patient Demographics")
+
 # Example inputs
-age = st.slider("Patient Age", 0, 100, 50)
+age_group = st.selectbox("Patient Age Group", ["<40", "40-64", "65-79", "80+"])
 gender = st.selectbox("Patient Gender", ["Male", "Female"])
-primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease", "Stroke", "Hip/Knee Surgery", "Coronary Artery Disease"])
-length_of_stay = st.slider("Length of Stay (days)", 1, 50, 10)
-num_medications = st.slider("Number of Medications", 1, 20, 5)
-num_procedures = st.slider("Number of Procedures", 0, 8, 2)
-emergency_admission = st.selectbox("Emergency Admission", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured"])
-prev_hospitalizations = st.slider("Previous Hospitalizations", 0, 10, 2)
+insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured", "Meritain Health"])
+living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "Assisted Living"])
+
+# Convert age group to numeric age for model prediction
+age_mapping = {"<40": 35, "40-64": 52, "65-79": 72, "80+": 85}
+age = age_mapping[age_group]
+
+# Clinical History Section
+st.header("Clinical History")
+primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease"])
 chronic_conditions = st.slider("Number of Chronic Conditions", 0, 8, 2)
-discharge_destination = st.selectbox("Discharge Destination", ["Home", "Skilled Nursing Facility", "Rehabilitation", "Hospice"])
-hemoglobin = st.slider("Hemoglobin Level", 0, 20, 10)
-creatinine = st.slider("Creatinine Level", 0, 10, 5)
-glucose = st.slider("Glucose Level", 0, 300, 100)
+comorbidity_score = st.slider("Charlson Comorbidity Index (CCI)", 0, 15, 3)
+prev_hospitalizations = st.slider("Previous Hospitalizations (12 months)", 0, 10, 2)
+recent_readmission = st.selectbox("Readmission in Last 30 Days?", ["Yes", "No"])
+
+# Hospital Stay Section
+st.header("Hospital Stay")
+length_of_stay = st.slider("Length of Stay (days)", 1, 50, 10)
+num_procedures = st.slider("Number of Procedures", 0, 10, 2)
+num_medications = st.slider("Number of Medications Prescribed", 1, 20, 5)
+emergency_admission = st.selectbox("Emergency Admission?", ["Yes", "No"])
+
+# Labs & Vitals at Discharge Section
+st.header("Labs & Vitals at Discharge")
+hemoglobin = st.slider("Hemoglobin Level (g/dL)", 0, 20, 10)
+creatinine = st.slider("Creatinine Level (mg/dL)", 0, 10, 5)
+glucose = st.slider("Glucose Level (mg/dL)", 0, 300, 100)
+albumin = st.slider("Albumin Level (g/dL)", 0, 6, 3)
+wbc = st.slider("White Blood Cell Count (x10^9/L)", 0, 30, 7)
+
+# Discharge & Follow-Up Section
+st.header("Discharge & Follow-Up")
+discharge_destination = st.selectbox("Discharge Destination", ["Home", "Skilled Nursing Facility", "Rehabilitation", "Hospice", "Against Medical Advice"])
+follow_up = st.selectbox("Follow-Up Appointment Within 7 Days?", ["Yes", "No"])
+discharge_instructions = st.selectbox("Discharge Instructions Provided?", ["Yes", "No"])
+
+# Convert Yes/No responses to numeric values for ML model
+emergency_admission_numeric = 1 if emergency_admission == "Yes" else 0
+recent_readmission_numeric = 1 if recent_readmission == "Yes" else 0
+follow_up_numeric = 1 if follow_up == "Yes" else 0
+discharge_instructions_numeric = 1 if discharge_instructions == "Yes" else 0
 
 # Collected the data from the user
 custom_patient = {
@@ -51,14 +83,20 @@ custom_patient = {
     'length_of_stay': length_of_stay,
     'num_medications': num_medications,
     'num_procedures': num_procedures,
-    'emergency_admission': emergency_admission,     
+    'emergency_admission': emergency_admission_numeric,     
     'insurance_type': insurance_type,
     'prev_hospitalizations': prev_hospitalizations,   
     'chronic_conditions': chronic_conditions,      
     'discharge_destination': discharge_destination, 
     'hemoglobin': hemoglobin,           
     'creatinine': creatinine,            
-    'glucose': glucose              
+    'glucose': glucose,
+    'comorbidity_score': comorbidity_score,
+    'recent_readmission': recent_readmission_numeric,
+    'albumin': albumin,
+    'wbc': wbc,
+    'follow_up': follow_up_numeric,
+    'discharge_instructions': discharge_instructions_numeric
 }
 
 # Make prediction
@@ -66,21 +104,44 @@ prediction, probability = predictor.predict_new_patient(custom_patient)
 
 if st.button("Predict Readmission Risk"):
     st.write("=" * 50)
-    st.write(f"Patient Profile:")
-    st.write(f"   Age: {custom_patient['age']} years")
-    st.write(f"   Gender: {custom_patient['gender']}")
-    st.write(f"   Diagnosis: {custom_patient['primary_diagnosis']}")
-    st.write(f"   Length of Stay: {custom_patient['length_of_stay']} days")
-    st.write(f"   Medications: {custom_patient['num_medications']}")
-    st.write(f"   Procedures: {custom_patient['num_procedures']}")
-    st.write(f"   Emergency Admission: {'Yes' if custom_patient['emergency_admission'] else 'No'}")
-    st.write(f"   Insurance Type: {custom_patient['insurance_type']}")
-    st.write(f"   Previous Hospitalizations: {custom_patient['prev_hospitalizations']}")
-    st.write(f"   Chronic Conditions: {custom_patient['chronic_conditions']}")
-    st.write(f"   Discharge Destination: {custom_patient['discharge_destination']}")
-    st.write(f"   Hemoglobin Level: {custom_patient['hemoglobin']}")
-    st.write(f"   Creatinine Level: {custom_patient['creatinine']}")
-    st.write(f"   Glucose Level: {custom_patient['glucose']}")
+    st.write("**PATIENT PROFILE**")
+    st.write("=" * 50)
+    
+    # Demographics
+    st.write("**Demographics:**")
+    st.write(f"   • Age Group: {age_group}")
+    st.write(f"   • Gender: {custom_patient['gender']}")
+    st.write(f"   • Insurance Type: {custom_patient['insurance_type']}")
+    st.write(f"   • Living Situation: {living_situation}")
+    
+    # Clinical History
+    st.write("\n**Clinical History:**")
+    st.write(f"   • Primary Diagnosis: {custom_patient['primary_diagnosis']}")
+    st.write(f"   • Chronic Conditions: {custom_patient['chronic_conditions']}")
+    st.write(f"   • Charlson Comorbidity Index: {custom_patient['comorbidity_score']}")
+    st.write(f"   • Previous Hospitalizations (12 months): {custom_patient['prev_hospitalizations']}")
+    st.write(f"   • Recent Readmission (30 days): {recent_readmission}")
+    
+    # Hospital Stay
+    st.write("\n**Hospital Stay:**")
+    st.write(f"   • Length of Stay: {custom_patient['length_of_stay']} days")
+    st.write(f"   • Number of Procedures: {custom_patient['num_procedures']}")
+    st.write(f"   • Medications Prescribed: {custom_patient['num_medications']}")
+    st.write(f"   • Emergency Admission: {emergency_admission}")
+    
+    # Labs & Vitals
+    st.write("\n**Labs & Vitals at Discharge:**")
+    st.write(f"   • Hemoglobin: {custom_patient['hemoglobin']} g/dL")
+    st.write(f"   • Creatinine: {custom_patient['creatinine']} mg/dL")
+    st.write(f"   • Glucose: {custom_patient['glucose']} mg/dL")
+    st.write(f"   • Albumin: {custom_patient['albumin']} g/dL")
+    st.write(f"   • White Blood Cell Count: {custom_patient['wbc']} x10^9/L")
+    
+    # Discharge & Follow-Up
+    st.write("\n**Discharge & Follow-Up:**")
+    st.write(f"   • Discharge Destination: {custom_patient['discharge_destination']}")
+    st.write(f"   • Follow-Up Within 7 Days: {follow_up}")
+    st.write(f"   • Discharge Instructions Provided: {discharge_instructions}")
     
     st.write("=" * 50)
     st.write("Prediction Results:")
