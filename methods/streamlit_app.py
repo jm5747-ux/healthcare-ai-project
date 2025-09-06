@@ -5,24 +5,31 @@ import inspect
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import ruptures as rpt
 import matplotlib.pyplot as plt
 
 import ml_model
 import importlib
 importlib.reload(ml_model)
 
-
 # Load the dataset from the CSV file
-df_hospital_readmission = pd.read_csv("datasets/hospital_readmission.csv")
+try:
+    df_hospital_readmission = pd.read_csv("datasets/hospital_readmission.csv")
+except FileNotFoundError:
+    st.error("Dataset file not found. Please ensure the CSV file is in the datasets folder.")
+    st.stop()
 
 # Initialize and train the model
-print("Training machine learning model...")
-predictor = ml_model.HospitalReadmissionPredictor()
-
-# Preprocess the data
-X, y = predictor.preprocess_data(df_hospital_readmission)
-X_test, y_test, y_pred, y_pred_proba = predictor.train_model(X, y, 'random_forest')
+try:
+    st.info("Training machine learning model...")
+    predictor = ml_model.HospitalReadmissionPredictor()
+    
+    # Preprocess the data
+    X, y = predictor.preprocess_data(df_hospital_readmission)
+    X_test, y_test, y_pred, y_pred_proba = predictor.train_model(X, y, 'random_forest')
+    st.success("Model training completed!")
+except Exception as e:
+    st.error(f"Error training model: {str(e)}")
+    st.stop()
 
 st.title("Healthcare AI Project")
 st.write("Welcome! This app predicts the risk of hospital readmission.")
