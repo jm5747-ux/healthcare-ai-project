@@ -69,4 +69,3 @@ def plot_exploration_graphs(data):
     # Show the plots
     plt.tight_layout()
     plt.show()          
-        

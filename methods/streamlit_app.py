@@ -48,13 +48,37 @@ living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "As
 
 # Age is now directly input as a number
 
+
 # Clinical History Section
 st.header("Clinical History")
-primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease"])
-chronic_conditions = st.slider("Number of Chronic Conditions", 0, 8, 2)
-comorbidity_score = st.slider("Charlson Comorbidity Index (CCI)", 0, 15, 3)
-prev_hospitalizations = st.slider("Previous Hospitalizations (12 months)", 0, 10, 2)
-recent_readmission = st.selectbox("Readmission in Last 30 Days?", ["Yes", "No"])
+
+# Let user decide: single diagnosis or multiple
+multi_diag = st.checkbox("Enter multiple diagnoses?")
+
+if multi_diag:
+    # Multiple diagnoses input
+    diagnoses_input = st.text_area(
+        "Enter Diagnoses (comma-separated)",
+        placeholder="e.g., HF, Diabetes, CKD"
+    )
+    diagnoses_list = [d.strip().lower() for d in diagnoses_input.split(",") if d.strip()]
+    mapped_diagnoses = [diagnosis_mapping.get(d, "Other/Unknown") for d in diagnoses_list]
+
+    if mapped_diagnoses:
+        st.write("Mapped Diagnoses:")
+        for d in mapped_diagnoses:
+            st.write(f"- {d}")
+
+else:
+    # Single diagnosis input
+    primary_diagnosis_input = st.text_input(
+        "Primary Diagnosis (type illness name)",
+        placeholder="e.g., Heart Failure"
+    )
+    primary_diagnosis = diagnosis_mapping.get(primary_diagnosis_input.strip().lower(), "Other/Unknown")
+    st.write(f"Mapped Diagnosis: **{primary_diagnosis}**")
+
+
 
 # Hospital Stay Section
 st.header("Hospital Stay")
