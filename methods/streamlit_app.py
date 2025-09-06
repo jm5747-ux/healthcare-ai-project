@@ -46,11 +46,69 @@ living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "As
 
 # Clinical History Section
 st.header("Clinical History")
-primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease"])
-chronic_conditions = st.slider("Number of Chronic Conditions", 0, 8, 2)
-comorbidity_score = st.slider("Charlson Comorbidity Index (CCI)", 0, 15, 3)
-prev_hospitalizations = st.slider("Previous Hospitalizations (12 months)", 0, 10, 2)
+
+# User can type multiple diagnoses separated by commas
+diagnoses_input = st.text_area(
+    "Enter Diagnoses (comma-separated)",
+    placeholder="e.g., HF, Diabetes, CKD"
+)
+
+# Mapping dictionary to standardize input
+diagnosis_mapping = {
+    "sepsis": "Septicemia (sepsis)",
+    "septicemia": "Septicemia (sepsis)",
+    "heart failure": "Heart Failure",
+    "hf": "Heart Failure",
+    "diabetes": "Diabetes Mellitus with Complication",
+    "diabetes mellitus with complication": "Diabetes Mellitus with Complication",
+    "renal failure": "Acute and Unspecified Renal Failure",
+    "kidney failure": "Acute and Unspecified Renal Failure",
+    "ckd": "Chronic Kidney Disease (CKD)",
+    "chronic kidney disease": "Chronic Kidney Disease (CKD)",
+    "copd": "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
+    "bronchiectasis": "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
+    "pneumonia": "Pneumonia (except TB)",
+    "covid": "COVID-19 (index year 2020)",
+    "covid-19": "COVID-19 (index year 2020)",
+    "dysrhythmia": "Cardiac Dysrhythmias",
+    "arrhythmia": "Cardiac Dysrhythmias",
+    "respiratory failure": "Respiratory Failure / Insufficiency / Arrest",
+    "ami": "Acute Myocardial Infarction (AMI)",
+    "myocardial infarction": "Acute Myocardial Infarction (AMI)",
+    "alcohol": "Alcohol-Related Disorders",
+    "uti": "Urinary Tract Infections (UTI)",
+    "urinary tract infection": "Urinary Tract Infections (UTI)",
+    "electrolyte disorder": "Fluid & Electrolyte Disorders",
+    "stroke": "Cerebral Infarction (Ischemic Stroke)",
+    "cerebral infarction": "Cerebral Infarction (Ischemic Stroke)",
+    "depression": "Depressive Disorders",
+    "depressive": "Depressive Disorders",
+    "gi bleed": "Gastrointestinal Hemorrhage",
+    "gastrointestinal hemorrhage": "Gastrointestinal Hemorrhage",
+    "skin infection": "Skin & Subcutaneous Tissue Infections",
+    "surgical complication": "Complication of Select Surgical or Medical Care / Injury (Initial Encounter)",
+    "psychosis": "Schizophrenia Spectrum & Other Psychotic Disorders",
+    "schizophrenia": "Schizophrenia Spectrum & Other Psychotic Disorders"
+}
+
+# Process input
+diagnoses_list = [d.strip().lower() for d in diagnoses_input.split(",") if d.strip()]
+mapped_diagnoses = [diagnosis_mapping.get(d, "Other/Unknown") for d in diagnoses_list]
+
+# Display result
+if mapped_diagnoses:
+    st.write("Mapped Diagnoses:")
+    for d in mapped_diagnoses:
+        st.write(f"- {d}")
+
+# Additional clinical fields
+chronic_conditions = st.number_input("Number of Chronic Conditions", min_value=0, max_value=15, value=2, step=1)
+comorbidity_score = st.number_input("Charlson Comorbidity Index (CCI)", min_value=0, max_value=15, value=3, step=1)
+prev_hospitalizations = st.number_input("Previous Hospitalizations (12 months)", min_value=0, max_value=20, value=2, step=1)
 recent_readmission = st.selectbox("Readmission in Last 30 Days?", ["Yes", "No"])
+
+# Use the first mapped diagnosis as primary_diagnosis for the ML model
+primary_diagnosis = mapped_diagnoses[0] if mapped_diagnoses else "Other/Unknown"
 
 
 
