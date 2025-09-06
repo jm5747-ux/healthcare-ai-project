@@ -47,68 +47,40 @@ living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "As
 # Clinical History Section
 st.header("Clinical History")
 
-# User can type multiple diagnoses separated by commas
-diagnoses_input = st.text_area(
-    "Enter Diagnoses (comma-separated)",
-    placeholder="e.g., HF, Diabetes, CKD"
+# Diagnosis options with search functionality
+diagnosis_options = [
+    "Septicemia (sepsis)",
+    "Heart Failure",
+    "Diabetes Mellitus with Complication",
+    "Acute and Unspecified Renal Failure",
+    "Schizophrenia Spectrum & Other Psychotic Disorders",
+    "Pneumonia (except TB)",
+    "COVID-19 (index year 2020)",
+    "Cardiac Dysrhythmias",
+    "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
+    "Respiratory Failure / Insufficiency / Arrest",
+    "Acute Myocardial Infarction (AMI)",
+    "Alcohol-Related Disorders",
+    "Urinary Tract Infections (UTI)",
+    "Fluid & Electrolyte Disorders",
+    "Complication of Select Surgical or Medical Care / Injury (Initial Encounter)",
+    "Cerebral Infarction (Ischemic Stroke)",
+    "Depressive Disorders",
+    "Gastrointestinal Hemorrhage",
+    "Skin & Subcutaneous Tissue Infections",
+    "Chronic Kidney Disease (CKD)"
+]
+
+primary_diagnosis = st.selectbox(
+    "Primary Diagnosis (start typing to search)",
+    options=diagnosis_options
 )
-
-# Mapping dictionary to standardize input
-diagnosis_mapping = {
-    "sepsis": "Septicemia (sepsis)",
-    "septicemia": "Septicemia (sepsis)",
-    "heart failure": "Heart Failure",
-    "hf": "Heart Failure",
-    "diabetes": "Diabetes Mellitus with Complication",
-    "diabetes mellitus with complication": "Diabetes Mellitus with Complication",
-    "renal failure": "Acute and Unspecified Renal Failure",
-    "kidney failure": "Acute and Unspecified Renal Failure",
-    "ckd": "Chronic Kidney Disease (CKD)",
-    "chronic kidney disease": "Chronic Kidney Disease (CKD)",
-    "copd": "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
-    "bronchiectasis": "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
-    "pneumonia": "Pneumonia (except TB)",
-    "covid": "COVID-19 (index year 2020)",
-    "covid-19": "COVID-19 (index year 2020)",
-    "dysrhythmia": "Cardiac Dysrhythmias",
-    "arrhythmia": "Cardiac Dysrhythmias",
-    "respiratory failure": "Respiratory Failure / Insufficiency / Arrest",
-    "ami": "Acute Myocardial Infarction (AMI)",
-    "myocardial infarction": "Acute Myocardial Infarction (AMI)",
-    "alcohol": "Alcohol-Related Disorders",
-    "uti": "Urinary Tract Infections (UTI)",
-    "urinary tract infection": "Urinary Tract Infections (UTI)",
-    "electrolyte disorder": "Fluid & Electrolyte Disorders",
-    "stroke": "Cerebral Infarction (Ischemic Stroke)",
-    "cerebral infarction": "Cerebral Infarction (Ischemic Stroke)",
-    "depression": "Depressive Disorders",
-    "depressive": "Depressive Disorders",
-    "gi bleed": "Gastrointestinal Hemorrhage",
-    "gastrointestinal hemorrhage": "Gastrointestinal Hemorrhage",
-    "skin infection": "Skin & Subcutaneous Tissue Infections",
-    "surgical complication": "Complication of Select Surgical or Medical Care / Injury (Initial Encounter)",
-    "psychosis": "Schizophrenia Spectrum & Other Psychotic Disorders",
-    "schizophrenia": "Schizophrenia Spectrum & Other Psychotic Disorders"
-}
-
-# Process input
-diagnoses_list = [d.strip().lower() for d in diagnoses_input.split(",") if d.strip()]
-mapped_diagnoses = [diagnosis_mapping.get(d, "Other/Unknown") for d in diagnoses_list]
-
-# Display result
-if mapped_diagnoses:
-    st.write("Mapped Diagnoses:")
-    for d in mapped_diagnoses:
-        st.write(f"- {d}")
 
 # Additional clinical fields
 chronic_conditions = st.number_input("Number of Chronic Conditions", min_value=0, max_value=15, value=2, step=1)
 comorbidity_score = st.number_input("Charlson Comorbidity Index (CCI)", min_value=0, max_value=15, value=3, step=1)
 prev_hospitalizations = st.number_input("Previous Hospitalizations (12 months)", min_value=0, max_value=20, value=2, step=1)
 recent_readmission = st.selectbox("Readmission in Last 30 Days?", ["Yes", "No"])
-
-# Use the first mapped diagnosis as primary_diagnosis for the ML model
-primary_diagnosis = mapped_diagnoses[0] if mapped_diagnoses else "Other/Unknown"
 
 
 
