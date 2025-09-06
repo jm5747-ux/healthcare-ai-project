@@ -46,32 +46,7 @@ living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "As
 
 # Clinical History Section
 st.header("Clinical History")
-
-# Let user decide: single diagnosis or multiple
-multi_diag = st.checkbox("Enter multiple diagnoses?")
-
-if multi_diag:
-    # Multiple diagnoses input
-    diagnoses_input = st.text_area(
-        "Enter Diagnoses (comma-separated)",
-        placeholder="e.g., HF, Diabetes, CKD"
-    )
-    diagnoses_list = [d.strip().lower() for d in diagnoses_input.split(",") if d.strip()]
-    mapped_diagnoses = [diagnosis_mapping.get(d, "Other/Unknown") for d in diagnoses_list]
-
-    if mapped_diagnoses:
-        st.write("Mapped Diagnoses:")
-        for d in mapped_diagnoses:
-            st.write(f"- {d}")
-
-else:
-    # Single diagnosis input
-    primary_diagnosis_input = st.text_input(
-        "Primary Diagnosis (type illness name)",
-        placeholder="e.g., Heart Failure"
-    )
-    primary_diagnosis = diagnosis_mapping.get(primary_diagnosis_input.strip().lower(), "Other/Unknown")
-    st.write(f"Mapped Diagnosis: **{primary_diagnosis}**")
+primary_diagnosis = st.selectbox("Primary Diagnosis", ["Heart Failure", "Pneumonia", "COPD", "Diabetes", "Kidney Disease"])
 
 
 
