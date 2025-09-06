@@ -35,9 +35,6 @@ st.write("Welcome! This app predicts the risk of hospital readmission.")
 # Patient Demographics Section
 st.header("Patient Demographics")
 
-# Example inputs
-st.header("Patient Demographics")
-
 age = st.number_input("Patient Age", min_value=0, max_value=120, value=50, step=1)
 gender = st.selectbox("Patient Gender", ["Male", "Female"])
 insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured"])
