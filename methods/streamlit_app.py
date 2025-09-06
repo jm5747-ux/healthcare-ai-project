@@ -38,14 +38,15 @@ st.write("Welcome! This app predicts the risk of hospital readmission.")
 st.header("Patient Demographics")
 
 # Example inputs
-age_group = st.selectbox("Patient Age Group", ["<40", "40-64", "65-79", "80+"])
+st.header("Patient Demographics")
+
+age = st.number_input("Patient Age", min_value=0, max_value=120, value=50, step=1)
 gender = st.selectbox("Patient Gender", ["Male", "Female"])
-insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured", "Meritain Health"])
+insurance_type = st.selectbox("Insurance Type", ["Medicare", "Medicaid", "Private", "Uninsured"])
 living_situation = st.selectbox("Living Situation", ["Alone", "With Family", "Assisted Living"])
 
-# Convert age group to numeric age for model prediction
-age_mapping = {"<40": 35, "40-64": 52, "65-79": 72, "80+": 85}
-age = age_mapping[age_group]
+
+# Age is now directly input as a number
 
 # Clinical History Section
 st.header("Clinical History")
@@ -116,7 +117,7 @@ if st.button("Predict Readmission Risk"):
     
     # Demographics
     st.write("**Demographics:**")
-    st.write(f"   • Age Group: {age_group}")
+    st.write(f"   • Age: {custom_patient['age']} years")
     st.write(f"   • Gender: {custom_patient['gender']}")
     st.write(f"   • Insurance Type: {custom_patient['insurance_type']}")
     st.write(f"   • Living Situation: {living_situation}")
