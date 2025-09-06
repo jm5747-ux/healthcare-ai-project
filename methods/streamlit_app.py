@@ -20,13 +20,11 @@ except FileNotFoundError:
 
 # Initialize and train the model
 try:
-    st.info("Training machine learning model...")
     predictor = ml_model.HospitalReadmissionPredictor()
     
     # Preprocess the data
     X, y = predictor.preprocess_data(df_hospital_readmission)
     X_test, y_test, y_pred, y_pred_proba = predictor.train_model(X, y, 'random_forest')
-    st.success("Model training completed!")
 except Exception as e:
     st.error(f"Error training model: {str(e)}")
     st.stop()
