@@ -111,7 +111,7 @@ recent_readmission_numeric = 1 if recent_readmission == "Yes" else 0
 follow_up_numeric = 1 if follow_up == "Yes" else 0
 discharge_instructions_numeric = 1 if discharge_instructions == "Yes" else 0
 
-# Collected the data from the user
+# Collected the data from the user (only features the model was trained on)
 custom_patient = {
     'age': age,                    
     'gender': gender,    
@@ -126,13 +126,7 @@ custom_patient = {
     'discharge_destination': discharge_destination, 
     'hemoglobin': hemoglobin,           
     'creatinine': creatinine,            
-    'glucose': glucose,
-    'comorbidity_score': comorbidity_score,
-    'recent_readmission': recent_readmission_numeric,
-    'albumin': albumin,
-    'wbc': wbc,
-    'follow_up': follow_up_numeric,
-    'discharge_instructions': discharge_instructions_numeric
+    'glucose': glucose
 }
 
 # Make prediction
