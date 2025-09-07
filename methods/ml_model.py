@@ -29,12 +29,14 @@ class HospitalReadmissionPredictor:
                 df[col] = le.fit_transform(df[col])
                 self.label_encoders[col] = le
         
-        # Select features for the model
+        # Select features for the model (including new clinical features)
         feature_columns = [
             'age', 'gender', 'primary_diagnosis', 'length_of_stay', 
             'num_medications', 'num_procedures', 'emergency_admission',
             'insurance_type', 'prev_hospitalizations', 'chronic_conditions',
-            'discharge_destination', 'hemoglobin', 'creatinine', 'glucose'
+            'discharge_destination', 'hemoglobin', 'creatinine', 'glucose',
+            'comorbidity_score', 'recent_readmission', 'albumin', 'wbc',
+            'follow_up', 'discharge_instructions'
         ]
         
         self.feature_columns = feature_columns

@@ -59,6 +59,22 @@ def generate_hospital_data(n_samples=1000):
     creatinine = np.random.normal(1.2, 0.5, n_samples)
     glucose = np.random.normal(140, 40, n_samples)
     
+    # Additional clinical features
+    comorbidity_score = np.random.poisson(3, n_samples)
+    comorbidity_score = np.clip(comorbidity_score, 0, 15)
+    
+    recent_readmission = np.random.choice([0, 1], n_samples, p=[0.8, 0.2])
+    
+    albumin = np.random.normal(3.5, 0.5, n_samples)
+    albumin = np.clip(albumin, 2.0, 5.0)
+    
+    wbc = np.random.normal(7, 2, n_samples)
+    wbc = np.clip(wbc, 3, 15)
+    
+    follow_up = np.random.choice([0, 1], n_samples, p=[0.3, 0.7])
+    
+    discharge_instructions = np.random.choice([0, 1], n_samples, p=[0.1, 0.9])
+    
     # Create realistic readmission risk based on features
     readmission_risk = (
         (ages > 70) * 0.3 +
@@ -70,7 +86,13 @@ def generate_hospital_data(n_samples=1000):
         (discharge_destination != 'Home') * 0.15 +
         (hemoglobin < 10) * 0.1 +
         (creatinine > 2) * 0.1 +
-        (glucose > 200) * 0.1
+        (glucose > 200) * 0.1 +
+        (comorbidity_score > 5) * 0.2 +
+        (recent_readmission == 1) * 0.3 +
+        (albumin < 3.0) * 0.15 +
+        (wbc > 12) * 0.1 +
+        (follow_up == 0) * 0.1 +
+        (discharge_instructions == 0) * 0.15
     )
     
     # Add some randomness
@@ -97,6 +119,12 @@ def generate_hospital_data(n_samples=1000):
         'hemoglobin': hemoglobin,
         'creatinine': creatinine,
         'glucose': glucose,
+        'comorbidity_score': comorbidity_score,
+        'recent_readmission': recent_readmission,
+        'albumin': albumin,
+        'wbc': wbc,
+        'follow_up': follow_up,
+        'discharge_instructions': discharge_instructions,
         'readmitted_30_days': readmitted_30_days
     })
     
