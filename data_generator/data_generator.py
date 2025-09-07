@@ -17,9 +17,29 @@ def generate_hospital_data(n_samples=1000):
     
     genders = np.random.choice(['Male', 'Female'], n_samples)
     
-    # Medical conditions (common causes of readmission)
-    conditions = ['Heart Failure', 'Pneumonia', 'COPD', 'Diabetes', 'Kidney Disease', 
-                  'Stroke', 'Hip/Knee Surgery', 'Coronary Artery Disease']
+    # Medical conditions (matching Streamlit app options)
+    conditions = [
+        "Septicemia (sepsis)",
+        "Heart Failure",
+        "Diabetes Mellitus with Complication",
+        "Acute and Unspecified Renal Failure",
+        "Schizophrenia Spectrum & Other Psychotic Disorders",
+        "Pneumonia (except TB)",
+        "COVID-19 (index year 2020)",
+        "Cardiac Dysrhythmias",
+        "Chronic Obstructive Pulmonary Disease (COPD) & Bronchiectasis",
+        "Respiratory Failure / Insufficiency / Arrest",
+        "Acute Myocardial Infarction (AMI)",
+        "Alcohol-Related Disorders",
+        "Urinary Tract Infections (UTI)",
+        "Fluid & Electrolyte Disorders",
+        "Complication of Select Surgical or Medical Care / Injury (Initial Encounter)",
+        "Cerebral Infarction (Ischemic Stroke)",
+        "Depressive Disorders",
+        "Gastrointestinal Hemorrhage",
+        "Skin & Subcutaneous Tissue Infections",
+        "Chronic Kidney Disease (CKD)"
+    ]
     
     primary_diagnosis = np.random.choice(conditions, n_samples)
     
@@ -50,9 +70,9 @@ def generate_hospital_data(n_samples=1000):
     chronic_conditions = np.random.poisson(2, n_samples)
     chronic_conditions = np.clip(chronic_conditions, 0, 8)
     
-    # Discharge destination
-    discharge_destinations = ['Home', 'Skilled Nursing Facility', 'Rehabilitation', 'Hospice']
-    discharge_destination = np.random.choice(discharge_destinations, n_samples, p=[0.6, 0.2, 0.15, 0.05])
+    # Discharge destination (matching Streamlit app options)
+    discharge_destinations = ['Home', 'Skilled Nursing Facility', 'Rehabilitation', 'Hospice', 'Against Medical Advice']
+    discharge_destination = np.random.choice(discharge_destinations, n_samples, p=[0.55, 0.2, 0.15, 0.05, 0.05])
     
     # Lab values (simplified)
     hemoglobin = np.random.normal(12, 2, n_samples)
